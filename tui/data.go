@@ -1,6 +1,7 @@
 package tui
 
 import (
+	"encoding/json"
 	"fmt"
 	"sort"
 	"strings"
@@ -175,7 +176,18 @@ func (i *datas) buildPanelData(t *Tui, operation int) {
 				if strings.Index(sortedField, i.filterWord) == -1 {
 					continue
 				}
-				displayValue := dataValue.(string)
+				displayValue := ""
+				if dv, ok := dataValue.(string); !ok {
+
+					jv, err := json.Marshal(dataValue)
+					if err != nil {
+						displayValue = "JSON"
+					} else {
+						displayValue = string(jv[:])
+					}
+				} else {
+					displayValue = dv
+				}
 				common.Logger.WithFields(logrus.Fields{
 					"unit":     "datas",
 					"function": "data",
