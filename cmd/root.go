@@ -1,5 +1,5 @@
 /*
-Copyright © 2020 NAME HERE <EMAIL ADDRESS>
+Copyright © 2020 Christopher Maahs <cmaahs@gmail.com>
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -18,7 +18,10 @@ package cmd
 import (
 	"fmt"
 	"os"
+	"strings"
 
+	"github.com/maahsome/vault-view/common"
+	"github.com/maahsome/vault-view/tui"
 	"github.com/spf13/cobra"
 
 	homedir "github.com/mitchellh/go-homedir"
@@ -34,11 +37,42 @@ var rootCmd = &cobra.Command{
 	Long:  ``,
 	Run: func(cmd *cobra.Command, args []string) {
 
+		logFile, _ := cmd.Flags().GetString("log-file")
+		logLevel, _ := cmd.Flags().GetString("log-level")
+		ll := "Warning"
+		switch strings.ToLower(logLevel) {
+		case "trace":
+			ll = "Trace"
+		case "debug":
+			ll = "Debug"
+		case "info":
+			ll = "Info"
+		case "warning":
+			ll = "Warning"
+		case "error":
+			ll = "Error"
+		case "fatal":
+			ll = "Fatal"
+		}
+
+		common.NewLogger(ll, logFile)
+		ret := startTUI()
+		os.Exit(ret)
 	},
 }
 
-// Execute adds all child commands to the root command and sets flags appropriately.
-// This is called by main.main(). It only needs to happen once to the rootCmd.
+func startTUI() int {
+	tui := tui.New()
+
+	if err := tui.Start(); err != nil {
+		common.Logger.Errorf("cannot start vault-view: %s", err)
+		return 1
+	}
+
+	return 0
+}
+
+// Execute - Run everything
 func Execute() {
 	if err := rootCmd.Execute(); err != nil {
 		fmt.Println(err)
@@ -49,15 +83,10 @@ func Execute() {
 func init() {
 	cobra.OnInitialize(initConfig)
 
-	// Here you will define your flags and configuration settings.
-	// Cobra supports persistent flags, which, if defined here,
-	// will be global for your application.
-
 	rootCmd.PersistentFlags().StringVar(&cfgFile, "config", "", "config file (default is $HOME/.vault-view.yaml)")
 
-	// Cobra also supports local flags, which will only run
-	// when this action is called directly.
-	rootCmd.Flags().BoolP("toggle", "t", false, "Help message for toggle")
+	rootCmd.Flags().StringP("log-file", "l", "", "Specify a log file to log events to, default to no logging")
+	rootCmd.Flags().StringP("log-level", "v", "", "Specify a log level for logging, default to Warning (Trace, Debug, Info, Warning, Error, Fatal)")
 }
 
 // initConfig reads in config file and ENV variables if set.
