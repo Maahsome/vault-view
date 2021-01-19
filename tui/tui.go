@@ -109,7 +109,7 @@ func (t *Tui) dataPanel() *datas {
 func (t *Tui) initPanels() {
 	folders := newFolders(t)
 	command := newCommand(t)
-	info := newInfo(t, "v0.0.3")
+	info := newInfo(t, "v0.0.2")
 	location := newLocation()
 	datas := newDatas(t)
 

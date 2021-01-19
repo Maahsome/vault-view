@@ -7,6 +7,10 @@ ran through my head.  A TUI CLI for browsing Hashicorp vault may not be somethin
 that is needed, though it should be fun to try to create an experience similar to
 the k9s interface.  So much coolness.
 
+## Screenshot
+
+![Screenshot](vault-view-main.png)
+
 ## Credits
 
 |Github Repo|Notes|
