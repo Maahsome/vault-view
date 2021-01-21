@@ -28,7 +28,12 @@ import (
 	"github.com/spf13/viper"
 )
 
-var cfgFile string
+var (
+	cfgFile   string
+	semVer    string
+	gitCommit string
+	buildDate string
+)
 
 // rootCmd represents the base command when called without any subcommands
 var rootCmd = &cobra.Command{
@@ -62,7 +67,7 @@ var rootCmd = &cobra.Command{
 }
 
 func startTUI() int {
-	tui := tui.New()
+	tui := tui.New(semVer)
 
 	if err := tui.Start(); err != nil {
 		common.Logger.Errorf("cannot start vault-view: %s", err)

@@ -13,14 +13,14 @@ type info struct {
 	Menu   *infoMenu
 }
 
-func newInfo(t *Tui, semVer string) *info {
+func newInfo(t *Tui) *info {
 
 	common.Logger.WithFields(logrus.Fields{
 		"unit":     "info",
 		"function": "tui",
 	}).Debug("Creating newInfo")
 	w, _ := consolesize.GetConsoleSize()
-	logo := newInfoLogo(semVer)
+	logo := newInfoLogo(t.semVer)
 	menu := newInfoMenu(t)
 	indicator := newInfoIndicator(t)
 

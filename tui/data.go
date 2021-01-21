@@ -16,9 +16,10 @@ import (
 )
 
 type dataRecord struct {
-	Field   string
-	Value   string
-	Version int
+	Field        string
+	Value        string
+	DisplayValue string
+	Version      int
 }
 
 type dataMark struct {
@@ -68,6 +69,11 @@ func (i *datas) setKeybinding(t *Tui) {
 
 		selectedFolder := t.selectedFolder()
 		selectedData := t.selectedData()
+
+		switch event.Key() {
+		case tcell.KeyLeft, tcell.KeyEscape:
+			t.prevPanel()
+		}
 		switch event.Rune() {
 		case 'c':
 			// Copy KEY name to clipboard
@@ -77,15 +83,12 @@ func (i *datas) setKeybinding(t *Tui) {
 			go t.ClearIndicator(1)
 		case 'C':
 			// Copy Vault Commmand to clipboard
-			vCommand := fmt.Sprintf("vault kv get --format table --field %s folder%s", selectedData.Field, selectedFolder.FullPath)
+			vCommand := fmt.Sprintf("vault kv get --format table --field %s secret%s", selectedData.Field, selectedFolder.FullPath)
 			clipboard.Set(vCommand)
 			origText := t.state.info.Status.GetText(false)
 			t.state.info.Status.SetText(fmt.Sprintf("%s%s", origText, t.lang.GetText("ui", "Copied to clipboard")))
 			go t.ClearIndicator(1)
 		case 'v':
-			// Copy VALUE to clipboard
-			// Need to grab this from the state rather than the table, in
-			// case the datas are hidden "**********"
 			clipboard.Set(selectedData.Value)
 			origText := t.state.info.Status.GetText(false)
 			t.state.info.Status.SetText(fmt.Sprintf("%s%s", origText, t.lang.GetText("ui", "Copied to clipboard")))
@@ -177,16 +180,20 @@ func (i *datas) buildPanelData(t *Tui, operation int) {
 					continue
 				}
 				displayValue := ""
+				actualValue := ""
 				if dv, ok := dataValue.(string); !ok {
 
 					jv, err := json.Marshal(dataValue)
 					if err != nil {
 						displayValue = "JSON"
+						actualValue = "JSON"
 					} else {
 						displayValue = string(jv[:])
+						actualValue = displayValue
 					}
 				} else {
 					displayValue = dv
+					actualValue = dv
 				}
 				common.Logger.WithFields(logrus.Fields{
 					"unit":     "datas",
@@ -197,9 +204,10 @@ func (i *datas) buildPanelData(t *Tui, operation int) {
 				}
 
 				t.state.resources.datas[sortedField] = &dataRecord{
-					Field:   sortedField,
-					Value:   displayValue,
-					Version: data.Data.Metadata.Version,
+					Field:        sortedField,
+					Value:        actualValue,
+					DisplayValue: displayValue,
+					Version:      data.Data.Metadata.Version,
 				}
 				t.state.resources.dataRows[rowCount] = sortedField
 				rowCount++
@@ -250,7 +258,7 @@ func (i *datas) setEntries(t *Tui, operation int) {
 			SetMaxWidth(40).
 			SetExpansion(0))
 
-		table.SetCell(c+1, 1, tview.NewTableCell(dataRec.Value).
+		table.SetCell(c+1, 1, tview.NewTableCell(dataRec.DisplayValue).
 			SetTextColor(tcell.ColorLightBlue).
 			SetMaxWidth(1).
 			SetExpansion(1))

@@ -71,10 +71,11 @@ type Tui struct {
 	vault      vault.Client
 	vaultCache *vault.Cache
 	lang       *resource.Lang
+	semVer     string
 }
 
 // New create new Tui
-func New() *Tui {
+func New(version string) *Tui {
 	vaultCli := vault.NewVault()
 	vaultCache := vault.NewCache(vaultCli)
 
@@ -85,6 +86,7 @@ func New() *Tui {
 		vault:      vaultCli,
 		vaultCache: vaultCache,
 		lang:       resource.NewLanguage(),
+		semVer:     version,
 	}
 }
 
@@ -109,7 +111,7 @@ func (t *Tui) dataPanel() *datas {
 func (t *Tui) initPanels() {
 	folders := newFolders(t)
 	command := newCommand(t)
-	info := newInfo(t, "v0.0.2")
+	info := newInfo(t)
 	location := newLocation()
 	datas := newDatas(t)
 
