@@ -8,7 +8,9 @@ import (
 
 	"github.com/gdamore/tcell/v2"
 	"github.com/maahsome/tview"
-	"github.com/maahsome/vault-view/clipboard"
+
+	// "github.com/maahsome/vault-view/clipboard"
+	"github.com/atotto/clipboard"
 	"github.com/maahsome/vault-view/common"
 	"github.com/maahsome/vault-view/resource"
 	"github.com/maahsome/vault-view/vault"
@@ -241,7 +243,8 @@ func (i *folders) buildCmdForPath(t *Tui, path string) string {
 func (i *folders) selectedCmdToClipboard(t *Tui, s *folder) {
 
 	vCommand := i.buildCmdForPath(t, s.FullPath)
-	clipboard.Set(vCommand)
+	// clipboard.Set(vCommand)
+	clipboard.WriteAll(vCommand)
 	origText := t.state.info.Status.GetText(false)
 	t.state.info.Status.SetText(fmt.Sprintf("%s%s", origText, t.lang.GetText("ui", "Copied to clipboard")))
 	go t.ClearIndicator(1)
@@ -255,7 +258,8 @@ func (i *folders) markedCmdToClipboard(t *Tui) {
 		}
 	}
 
-	clipboard.Set(vCommand)
+	// clipboard.Set(vCommand)
+	clipboard.WriteAll(vCommand)
 	origText := t.state.info.Status.GetText(false)
 	t.state.info.Status.SetText(fmt.Sprintf("%s%s", origText, t.lang.GetText("ui", "Copied to clipboard")))
 	go t.ClearIndicator(1)

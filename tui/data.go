@@ -8,7 +8,9 @@ import (
 
 	"github.com/gdamore/tcell/v2"
 	"github.com/maahsome/tview"
-	"github.com/maahsome/vault-view/clipboard"
+
+	// "github.com/maahsome/vault-view/clipboard"
+	"github.com/atotto/clipboard"
 	"github.com/maahsome/vault-view/common"
 	"github.com/maahsome/vault-view/resource"
 	"github.com/maahsome/vault-view/vault"
@@ -77,19 +79,23 @@ func (i *datas) setKeybinding(t *Tui) {
 		switch event.Rune() {
 		case 'c':
 			// Copy KEY name to clipboard
-			clipboard.Set(selectedData.Field)
+			// clipboard .Set(selectedData.Field)
+			clipboard.WriteAll(selectedData.Field)
 			origText := t.state.info.Status.GetText(false)
 			t.state.info.Status.SetText(fmt.Sprintf("%s%s", origText, t.lang.GetText("ui", "Copied to clipboard")))
 			go t.ClearIndicator(1)
 		case 'C':
 			// Copy Vault Commmand to clipboard
 			vCommand := fmt.Sprintf("vault kv get --format table --field %s secret%s", selectedData.Field, selectedFolder.FullPath)
-			clipboard.Set(vCommand)
+			// clipboard.Set(vCommand)
+			clipboard.WriteAll(vCommand)
 			origText := t.state.info.Status.GetText(false)
 			t.state.info.Status.SetText(fmt.Sprintf("%s%s", origText, t.lang.GetText("ui", "Copied to clipboard")))
 			go t.ClearIndicator(1)
 		case 'v':
-			clipboard.Set(selectedData.Value)
+			// Copy the VALUE to clipboard
+			// clipboard.Set(selectedData.Value)
+			clipboard.WriteAll(selectedData.Value)
 			origText := t.state.info.Status.GetText(false)
 			t.state.info.Status.SetText(fmt.Sprintf("%s%s", origText, t.lang.GetText("ui", "Copied to clipboard")))
 			go t.ClearIndicator(1)
