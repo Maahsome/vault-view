@@ -3,7 +3,9 @@ module github.com/maahsome/vault-view
 go 1.15
 
 require (
+	github.com/atotto/clipboard v0.1.2
 	github.com/ckatsak/glocc v0.0.1 // indirect
+	github.com/conformal/gotk3 v0.0.0-20140908210829-7a6ce3ecbc88
 	github.com/containerd/containerd v1.4.3 // indirect
 	github.com/docker/distribution v2.7.1+incompatible // indirect
 	github.com/docker/docker v20.10.1+incompatible
