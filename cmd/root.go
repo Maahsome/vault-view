@@ -32,6 +32,7 @@ var (
 	cfgFile   string
 	semVer    string
 	gitCommit string
+	gitRef    string
 	buildDate string
 )
 
@@ -67,6 +68,7 @@ var rootCmd = &cobra.Command{
 }
 
 func startTUI() int {
+
 	tui := tui.New(semVer)
 
 	if err := tui.Start(); err != nil {
