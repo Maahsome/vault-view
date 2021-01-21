@@ -41,7 +41,7 @@ func (t *Tui) helpPage() {
 
 	helpText := `
       [white]GENERAL                                                 NAVIGATION
-      [red]<s> [brightwhite]      Toggle Showing Vault Values                   [red]<Left Arrow/ESC> [brightwhite]    Back
+      [red]<s> [brightwhite]      Toggle Showing Vault Values                   [red]<Left Arrow/ESC> [brightwhite]    Back (Data to Folder Frame as well)
       [red]<c> [brightwhite]      Copy Bash Command of Selected Item            [red]<Right Arrow/ENTER> [brightwhite] Open Selected Item
       [red]<C> [brightwhite]      Copy Bash Command for Marked Items            [red]<:quit> [brightwhite]             Quit
       [red]<v> [brightwhite]      Copy the selected Value                       [red]<TAB> [brightwhite]               Switch Frames
