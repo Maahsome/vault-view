@@ -8,4 +8,4 @@ endif
 changelog: check_release_version ## Generate the changelog.
 	@mkdir -p changelog/releases && rm -f changelog/releases/$(RELEASE_VERSION).md
 	go run ./release/changelog/gen-changelog.go -tag=$(RELEASE_VERSION) -changelog=changelog/releases/$(RELEASE_VERSION).md
-	rm -f ./changelog/fragments/!(00-template.yaml)
+	find ./changelog/fragments -type f ! -name 00-template.yaml -delete
