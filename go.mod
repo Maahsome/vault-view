@@ -4,6 +4,7 @@ go 1.15
 
 require (
 	github.com/atotto/clipboard v0.1.2
+	github.com/blang/semver/v4 v4.0.0
 	github.com/ckatsak/glocc v0.0.1 // indirect
 	github.com/conformal/gotk3 v0.0.0-20140908210829-7a6ce3ecbc88
 	github.com/containerd/containerd v1.4.3 // indirect
@@ -31,4 +32,5 @@ require (
 	github.com/tjgq/ticker v0.0.0-20140913211110-8b4870134629
 	golang.org/x/text v0.3.3
 	gotest.tools/v3 v3.0.3 // indirect
+	sigs.k8s.io/yaml v1.2.0
 )
