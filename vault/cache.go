@@ -8,6 +8,8 @@ import (
 	"github.com/sirupsen/logrus"
 )
 
+const expireMinutes=1
+
 // Cache - the interface
 type Cache struct {
 	VaultClient Client
@@ -58,10 +60,10 @@ func (c *Cache) UpdateCachePath(path string, paths map[string]Paths) (bool, erro
 }
 
 // CacheDataExist - Check to see if we have the key/value pairs in cache
-func (c *Cache) CacheDataExist(path string) bool {
+// We added the max parameter in order to support testing, as we can pass in a 0
+func (c *Cache) CacheDataExist(path string, max float64) bool {
 	if val, ok := c.CacheDatas[path]; ok {
 		diff := time.Now().Sub(val.CacheTime)
-		var max float64 = 1
 		if diff.Minutes() > max {
 			common.Logger.WithFields(logrus.Fields{
 				"unit":     "cache",
@@ -142,7 +144,7 @@ func (c *Cache) PreloadPaths(paths map[string]Paths) error {
 	}).Debug("Preload Paths")
 	for k, v := range paths {
 		if v.Type == vaultData {
-			if !c.CacheDataExist(k) {
+			if !c.CacheDataExist(k, expireMinutes) {
 				common.Logger.WithFields(logrus.Fields{
 					"unit":     "cache",
 					"function": "preload",
