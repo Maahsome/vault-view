@@ -207,7 +207,7 @@ func (i *folders) buildCmdForPath(t *Tui, path string) string {
 	var data vault.DataRecord
 	var derr error
 
-	if t.vaultCache.CacheDataExist(path) {
+	if t.vaultCache.CacheDataExist(path, expireMinutes) {
 		data = t.vaultCache.CacheDatas[path].Data
 	} else {
 		data, derr = t.vault.GetData(path)
@@ -432,7 +432,7 @@ func (i *folders) buildPanelData(t *Tui, operation int) {
 				}
 			}
 			// Attempt to find VERSION in the Data cache, this will lag in the display
-			if t.vaultCache.CacheDataExist(folderInfo.FullPath) {
+			if t.vaultCache.CacheDataExist(folderInfo.FullPath, expireMinutes) {
 				folderData = t.vaultCache.GetCacheData(folderInfo.FullPath)
 			}
 		} else {

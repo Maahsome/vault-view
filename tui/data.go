@@ -123,7 +123,7 @@ func (i *datas) buildPanelData(t *Tui, operation int) {
 
 			var data vault.DataRecord
 			var derr error
-			if t.vaultCache.CacheDataExist(selectedFolder.FullPath) {
+			if t.vaultCache.CacheDataExist(selectedFolder.FullPath, expireMinutes) {
 				// Add a check here to see how old our data is
 				common.Logger.WithFields(logrus.Fields{
 					"unit":     "datas",

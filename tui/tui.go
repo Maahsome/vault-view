@@ -13,6 +13,8 @@ import (
 	"github.com/sirupsen/logrus"
 )
 
+const expireMinutes = 1
+
 type panels struct {
 	currentPanel int
 	panel        []panel
